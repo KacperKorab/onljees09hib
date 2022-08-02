@@ -1,14 +1,11 @@
 package pl.coderslab.book;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import pl.coderslab.author.Author;
-import pl.coderslab.author.AuthorDao;
-import pl.coderslab.publisher.PublisherDao;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,42 +22,49 @@ public class BookController {
         this.authorDao = authorDao;
     }
 
-    @RequestMapping("/add")
+
+    @GetMapping("/save")
     @ResponseBody
-    public String saveBook() {
-        List<Author> authorsList = Arrays.asList(authorDao.findById(1L),authorDao.findById(2L));
-        bookDao.saveBook(Book.builder().
-                title("Title4").
-                description("Description4").
-                publisher(publisherDao.findById(2L)).
-                authors(authorsList).
-                rating(5).
-                build());
-        return "Book added successfully";
+    public String save() {
+
+        Author byId1 = authorDao.findById(1l);
+        Author byId2 = authorDao.findById(2l);
+        List<Author> objects = new ArrayList<>();
+        objects.add(byId1);
+        objects.add(byId2);
+
+        bookDao.save(Book.builder().
+                title("Thinking in PHP")
+                .description("Book fo java")
+                .publisher(publisherDao.findById(1l))
+                .authors(objects)
+                .rating(4)
+                .build());
+        return "ok";
     }
 
-    @RequestMapping("/get/{id}")
+    @GetMapping("/edit")
     @ResponseBody
-    public String getBook(@PathVariable long id) {
-        Book book = bookDao.findById(id);
-        return book.toString();
+    public String edit() {
+        Book byId = bookDao.findById(1l);
+        byId.setTitle("Thinking in Java");
+        bookDao.update(byId);
+        return "ok";
     }
 
-    @RequestMapping("/update/{id}/{title}")
+    @GetMapping("/get")
     @ResponseBody
-    public String updateBook(@PathVariable long id, @PathVariable String title) {
-        Book book = bookDao.findById(id);
-        book.setTitle(title);
-        bookDao.update(book);
-        return book.toString();
+    public String get() {
+        Book byId = bookDao.findById(1l);
+        System.out.println(byId);
+        return "ok";
     }
 
-    @RequestMapping("/delete/{id}")
+    @GetMapping("/delete")
     @ResponseBody
-    public String deleteBook(@PathVariable long id) {
-        Book book = bookDao.findById(id);
-        bookDao.delete(book);
-        return "deleted book with id: " + id;
+    public String delete() {
+        Book byId = bookDao.findById(1l);
+        bookDao.delete(byId);
+        return "ok";
     }
-
 }

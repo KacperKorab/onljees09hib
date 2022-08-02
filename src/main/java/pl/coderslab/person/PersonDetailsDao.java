@@ -9,23 +9,24 @@ import javax.transaction.Transactional;
 @Repository
 @Transactional
 public class PersonDetailsDao {
-    @PersistenceContext
-    EntityManager entityManager;
 
-    public void addPersonDetails(PersonDetails personDetails) {
-        entityManager.persist(personDetails);
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public void save(PersonDetails person) {
+        entityManager.persist(person);
     }
 
     public PersonDetails findById(long id) {
         return entityManager.find(PersonDetails.class, id);
     }
 
-    public void updatePersonDetails(PersonDetails personDetails) {
-        entityManager.merge(personDetails);
+    public void update(PersonDetails person) {
+        entityManager.merge(person);
     }
 
-    public void deletePersonDetails(PersonDetails personDetails) {
-        entityManager.remove(entityManager.contains(personDetails) ?
-                personDetails : entityManager.merge(personDetails));
+    public void delete(PersonDetails person) {
+        entityManager.remove(entityManager.contains(person) ?
+                person : entityManager.merge(person));
     }
 }

@@ -1,25 +1,24 @@
-package pl.coderslab.person;
+package pl.coderslab.book;
 
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Table(name = "authors")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Person {
+public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String login;
-    private String password;
-    private String email;
-    @OneToOne
-    private PersonDetails personDetails;
+    private String firstName;
+    private String lastName;
 
 }
